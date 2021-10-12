@@ -1,18 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.27"
-    }
-  }
-
-  required_version = ">= 0.14.9"
-}
-
-provider "aws" {
-  profile = "default"
-  region  = "eu-west-2"
-}
 
 //resource "aws_instance" "app_server" {
 //  ami           = "ami-830c94e3"
@@ -24,22 +9,22 @@ provider "aws" {
 //}
 
 
-data "aws_vpc" "tap-dev-vpc" {
-  id = module.vpc.vpc_id
-}
+#data "aws_vpc" "tap-dev-vpc" {
+#  id = module.vpc.vpc_id
+#}
+#
+#
+#data "aws_subnet_ids" "tap-dev-subnets" {
+#  vpc_id = module.vpc.vpc_id
+#}
 
-
-data "aws_subnet_ids" "tap-dev-subnets" {
-  vpc_id = module.vpc.vpc_id
-}
-
-data "aws_subnet" "tap-dev-subnet" {
-  //count = "${length(data.aws_subnet_ids.tap-dev-subnets.ids)}"
-  //id    = "${tolist(data.aws_subnet_ids.tap-dev-subnets.ids)}"
-
-  id = data.aws_subnet_ids.tap-dev-subnets.ids
-
-}
+#data "aws_subnet" "tap-dev-subnet" {
+#  //count = "${length(data.aws_subnet_ids.tap-dev-subnets.ids)}"
+#  //id    = "${tolist(data.aws_subnet_ids.tap-dev-subnets.ids)}"
+#
+#  //id = data.aws_subnet_ids.tap-dev-subnets.ids
+#
+#}
 
 
 resource "aws_key_pair" "dan-ssh-key" {
@@ -59,9 +44,8 @@ module "ec2_instance" {
   instance_type          = "t2.micro"
   key_name               = "dan-ssh-key"
   monitoring             = true
-  vpc_security_group_ids = ["sg-dev-access"]
-  subnet_id = module.vpc.public_subnets
-
+  vpc_security_group_ids = aws_security_group.allow_ssh_anywhere
+  subnet_id = aws_subnet.dev.id
 
   tags = {
     Terraform   = "true"

@@ -31,12 +31,18 @@ resource "aws_subnet" "dev" {
   }
 }
 
+#resource "aws_nat_gateway" "dev-nat-gw" {
+#  subnet_id = aws_subnet.dev.id
+#  allocation_id = aws_eip.
+#}
+
 resource "aws_security_group" "allow_ssh_anywhere" {
   name        = "Allow SSH"
   description = "Allow SSH inbound traffic"
   #  source  = "terraform-aws-modules/security-group/aws"
   #  version = "4.3.0"
   # insert the 3 required variables here
+ vpc_id = aws_vpc.tap-vpc.id
 
   ingress {
     description = "ssh from internet"

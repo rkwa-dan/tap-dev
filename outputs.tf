@@ -19,11 +19,27 @@ output "dev-vpc-sg" {
 }
 
 output "instance-id" {
-  value = module.ec2_instance.id
+  //value = module.ec2_instance.id
+
+value = tomap ({
+  for k, inst in module.ec2_instance : k => inst.id
+})
 }
 
 output "private-ip" {
-  value = module.ec2_instance.private_ip
+#  value = module.ec2_instance.private_ip
+
+  value = tomap ({
+  for k, inst in module.ec2_instance : k => inst.private_ip
+  })
+}
+
+output "public-ip" {
+  #  value = module.ec2_instance.private_ip
+
+  value = tomap ({
+  for k, inst in module.ec2_instance : k => inst.public_ip
+  })
 }
 
 #

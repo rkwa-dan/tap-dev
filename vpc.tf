@@ -35,7 +35,20 @@ resource "aws_subnet" "dev" {
 #  subnet_id = aws_subnet.dev.id
 #  allocation_id = aws_eip.
 #}
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.tap-vpc.id
 
+  tags = {
+    Name = "Tap Dev"
+  }
+}
+
+resource "aws_route" "dev-default-route" {
+  route_table_id = "rtb-0ca658f77add22593"
+  destination_cidr_block  = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.gw.id
+
+}
 resource "aws_security_group" "allow_ssh_anywhere" {
   name        = "Allow SSH"
   description = "Allow SSH inbound traffic"
@@ -46,10 +59,18 @@ resource "aws_security_group" "allow_ssh_anywhere" {
 
   ingress {
     description = "ssh from internet"
-    from_port   = 0
+    from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "ICMP from home"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["46.69.40.10/32"]
   }
 
   egress {

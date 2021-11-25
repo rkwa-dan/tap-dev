@@ -1,21 +1,3 @@
-#module "vpc" {
-#  source = "terraform-aws-modules/vpc/aws"
-#
-#  name = "tap-dev-vpc"
-#  cidr = "10.98.0.0/16"
-#
-#  azs             = ["eu-west-2a"]
-#  private_subnets = ["10.98.1.0/24"]
-#  public_subnets  = ["10.98.101.0/24"]
-#
-#  enable_nat_gateway = true
-#  enable_vpn_gateway = false
-#
-#  tags = {
-#    Terraform   = "true"
-#    Environment = "dev"
-#  }
-#}
 
 resource "aws_vpc" "tap-vpc" {
 #  name = "tap-dev-vpc"
@@ -31,10 +13,7 @@ resource "aws_subnet" "dev" {
   }
 }
 
-#resource "aws_nat_gateway" "dev-nat-gw" {
-#  subnet_id = aws_subnet.dev.id
-#  allocation_id = aws_eip.
-#}
+
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.tap-vpc.id
 
@@ -44,9 +23,9 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_route" "dev-default-route" {
-  route_table_id = "rtb-0ca658f77add22593"
+  route_table_id = aws_vpc.tap-vpc.default_route_table_id
   destination_cidr_block  = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.gw.id
+ gateway_id = aws_internet_gateway.gw.id
 
 }
 resource "aws_security_group" "allow_ssh_anywhere" {
@@ -66,12 +45,21 @@ resource "aws_security_group" "allow_ssh_anywhere" {
   }
 
   ingress {
-    description = "ssh from internet2"
+    description = "SSH - Perimeter81- 1"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["46.101.51.136/32"]
   }
+
+  ingress {
+    description = "SSH - Perimeter81 UK-2"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["46.101.51.208/32"]
+  }
+
   ingress {
     description = "ICMP from home"
     from_port   = -1

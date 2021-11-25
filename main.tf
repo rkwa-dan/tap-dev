@@ -7,10 +7,14 @@
 //    Name = "ExampleAppServerInstance"
 //  }
 //}
+resource "tls_private_key" "aws-key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
 
-resource "aws_key_pair" "dan-ssh-key" {
-  key_name   = "aws-ec2-ssh-pub-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDM2Co+7OgMbukt1MCFYiPTwVcrQ2TYrYa4PQtAxAC2lalQsoyiDhuCut3BWqyUPZrPIbsBluhIe7WAEOvdN/Hg4gI9kgcXAkTACkfH/oiJeBQW4Mq4qs1DxDiyyyD/dt1nFw8btkuv+HtFjYIoCslApeeswjQCOT9nM1f9icGiwXhLjXf/bu6MDCrcc7iPTHRiJAwiXRWWPi1XBdBjcB+v4RLHMnc8UydFaSmT0PQ32XBtcX2ouEgJI9Eyig5fKgPd5REZQmv5PG0tWOBKtSzlOdKcKKtzCKDIi4d/HvZJmeiMkL9xddeHwIi+F8NCiudHgUsGih6IpO2XCq9HqQIxbbEX3LVuAevu7LhxqmA1cVyX6yE5B5sp3+Q92Hi/3/637Q81Yu3+DH4uD/pqv8eTTx8YiV52SrhXqdCtUvZbeBZT+SNkWDJm+Yp68Ch7PA0T7qS690THEywt7ZxKjAhorr9MrlYQY60p3y+UbbeoQPFTnnxhiuh4attTLMiHy40= daniel@Daniels-MBP-2.lan"
+resource "aws_key_pair" "generated_key" {
+  key_name = "ssh-key"
+  public_key = tls_private_key.aws-key.public_key_openssh
 }
 
 data "template_file" "user_data" {
@@ -24,15 +28,15 @@ module "ec2_instance" {
 // build the requisite number of servers for the partner instances required.
   // instance size can be modified per spec.
 
-  for_each = toset(["one", "two", "three"])
-
+  for_each = toset(["one"])
+#  , "two", "three"])
   name = "dev-instance-${each.key}"
 
 #  ami                    = "ami-f976839e"  // amazon linux image arch64
   // running k3s on a t2.micro causes the cpu load to increase to 5.0 -so a larger instance size for cpu is required.
   ami                    = "ami-0b5e334d61108a1aa"  // amazon linux image arch64
   // ami-09c6eba41572dea7f
-  instance_type          = "t2.medium"
+  instance_type          = "t3a.xlarge"
   key_name               = aws_key_pair.dan-ssh-key.key_name
   monitoring             = true
   vpc_security_group_ids = ["${aws_security_group.allow_ssh_anywhere.id}"]

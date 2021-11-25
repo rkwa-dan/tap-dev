@@ -8,6 +8,16 @@ output "subnet-priv" {
   description = "Private Subnet ID"
 }
 
+output "default-route-table-id" {
+  value = aws_vpc.tap-vpc.default_route_table_id
+  description = "Tap VPC default route table ID"
+}
+
+output "internet-gw" {
+  value = aws_vpc.tap-vpc.main_route_table_id
+  description = "Tap VPC main route table ID"
+}
+
 #output "subnet-pub" {
 #  value  = module.vpc.aws_subnet.public
 #  description = "Public Subnet ID"

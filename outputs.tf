@@ -45,7 +45,7 @@ output "private-ip" {
 }
 
 output "public-ip" {
-   value = module.ec2_instance.private_ip
+   value = module.ec2_instance.public_ip
 
   # value = tomap ({
   # for k, inst in module.ec2_instance : k => inst.public_ip

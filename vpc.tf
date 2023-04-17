@@ -41,37 +41,84 @@ resource "aws_security_group" "allow_ssh_anywhere" {
   vpc_id = local.gse_ps_dev_sandbox_vpc_id
 
   ingress {
-    description = "ssh from Daniel Cave home:EE"
+    description = "Pure zScaler 1"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["147.161.145.22/32"]
+    cidr_blocks = ["147.161.166.0/23"]
+  }
+
+    ingress {
+    description = "Pure zScaler 2"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["147.161.142.0/23"]
+  }
+ 
+    ingress {
+    description = "Pure zScaler 3"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["165.225.198.0/23"]
+  }
+
+    ingress {
+    description = "Pure zScaler 4"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["165.225.196.0/23"]
+  }
+
+    ingress {
+    description = "Pure zScaler 5"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["147.161.224.0/23"]
+  }
+
+    ingress {
+    description = "Pure zScaler 6"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["147.161.140.0/23"]
+  }
+
+    ingress {
+    description = "Pure zScaler 7"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["147.161.144.0/23"]
+  }
+
+    ingress {
+    description = "Pure zScaler 7"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["165.225.16.0/23"]
+  }
+
+     ingress {
+    description = "Pure zScaler 7"
+    from_port   = 4996
+    to_port     = 4996
+    protocol    = "tcp"
+    cidr_blocks = ["50.202.38.118/32"]
   }
 
   # ingress {
-  #   description = "SSH - Perimeter81- 1"
-  #   from_port   = 22
-  #   to_port     = 22
-  #   protocol    = "tcp"
+  #   description = "ICMP from home"
+  #   from_port   = -1
+  #   to_port     = -1
+  #   protocol    = "icmp"
   #   cidr_blocks = ["46.101.51.136/32"]
   # }
-
-    ingress {
-    description = "SSH - Ryan kemp home:Sky"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["94.13.156.239/32"]
-  }
-
-
-  ingress {
-    description = "ICMP from home"
-    from_port   = -1
-    to_port     = -1
-    protocol    = "icmp"
-    cidr_blocks = ["46.101.51.136/32"]
-  }
 
   egress {
     from_port   = 0

@@ -105,7 +105,7 @@ resource "aws_security_group" "allow_ssh_anywhere" {
   }
 
      ingress {
-    description = "Pure zScaler 7"
+    description = "Pure zScaler 8"
     from_port   = 4996
     to_port     = 4996
     protocol    = "tcp"

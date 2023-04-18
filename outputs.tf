@@ -52,6 +52,11 @@ output "public-ip" {
   # })
 }
 
+output "Elastic IP" {
+  value = aws_eip.cmc-linux-vm.public_dns
+  
+}
+
 # output "EIP-for-vm" {
 #   value = aws_eip.cmc-linux-vm.public_ip
 # }

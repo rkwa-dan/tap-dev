@@ -68,4 +68,8 @@ module "ec2_instance" {
 resource "aws_eip" "cmc-linux-vm" {
   instance = module.ec2_instance.id
   vpc = true
+
+  tags = {
+    "owner" = "cmc-linux-vm"
+  }
 }

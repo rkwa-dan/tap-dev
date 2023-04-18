@@ -52,7 +52,7 @@ output "public-ip" {
   # })
 }
 
-output "Elastic IP" {
+output "Elastic-IP" {
   value = aws_eip.cmc-linux-vm.public_dns
   
 }

@@ -52,6 +52,14 @@ output "public-ip" {
   # })
 }
 
+# output "EIP-for-vm" {
+#   value = aws_eip.cmc-linux-vm.public_ip
+# }
+
+# output "EIP-dns" {
+#   value = module.ec2_instance.aws_eip.public_dns
+#   #  aws_eip.public_dns
+# }
 
 # output "ebs_volume_id" {
 

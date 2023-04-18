@@ -28,6 +28,16 @@ data "template_file" "user_data" {
 }
 // building dev  vm
 
+
+resource "aws_eip" "cmc-linux-vm" {
+  instance = module.ec2_instance.id
+  vpc = true
+
+  tags = {
+    "owner" = "cmc-linux-vm"
+  }
+}
+
 module "ec2_instance" {
   # lines below used for the 'ec2_instance' module which is a couple of years old. 
   source  = "terraform-aws-modules/ec2-instance/aws"
@@ -63,13 +73,4 @@ module "ec2_instance" {
     application = "cmc-linux"
   }
   
-}
-
-resource "aws_eip" "cmc-linux-vm" {
-  instance = module.ec2_instance.id
-  vpc = true
-
-  tags = {
-    "owner" = "cmc-linux-vm"
-  }
 }

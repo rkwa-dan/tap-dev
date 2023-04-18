@@ -1,19 +1,23 @@
 #!/bin/bash
 
-# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html#available-ec2-device-names
+yum -y install nvme-cli lvm2
 
-echo "Create a temporary symbolic link to retrieve UUID on first boot"
+fdisk /dev/nvme1n1 << EOF
+n
+p
+1
 
-VOLUMES_NAME=$(find /dev | grep -i 'nvme[0-21]n1$')
-echo "---> volumes list:"
-echo $${VOLUMES_NAME[@]} | tr " " "\n"
 
-for VOLUME in $${VOLUMES_NAME}
-do
- ALIAS=$(nvme id-ctrl -v "$${VOLUME}"| grep -Po '/dev/(sd[b-z]|xvd[b-z])')
- if [ ! -z "$${ALIAS}" ]; then
-  echo "---> create link from $${VOLUME} to $${ALIAS}"
-  ln -s "$${VOLUME}" "$${ALIAS}"
- fi
-done
+t
+8e
+w
 
+EOF 
+
+pvcreate /dev/nvme1n1p1
+vgcreate cmc-vg /dev/nvme1n1p1
+lvcreate -l 100%FREE -n lv cmc-vg
+mkfs /dev/cmc-vg/lv
+mkdir -p /opt/cmc/vol
+echo "/dev/cmc-vg/lv /opt/cmc/vol ext4 defaults 0 2" >> /etc/fstab
+mount /dev/cmc-vg/lv

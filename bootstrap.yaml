@@ -2,7 +2,7 @@
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 runcmd:
   - ' yum -y install nvme-cli '
-  - 'curl '
+  - 'curl -k https://raw.githubusercontent.com/psg18dhc/tap-dev/main/volumes.sh | sh -'
   # - ' echo Installing k3s '
   # - ' sudo curl -sfL https://get.k3s.io | sh - '
   # - ' sudo chmod 644 /etc/rancher/k3s/k3s.yaml '

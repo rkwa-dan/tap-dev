@@ -24,7 +24,7 @@ resource "local_file" "CMC_local_key" {
 }
 
 data "template_file" "user_data" {
-  template = file("./bootstrap.yaml")
+  template = file("./volumes.sh")
 }
 // building dev  vm
 
@@ -64,4 +64,8 @@ module "ec2_instance" {
   }
   
 }
- 
+
+resource "aws_eip" "cmc-linux-vm" {
+  instance = module.ec2_instance.id
+  vpc = true
+}

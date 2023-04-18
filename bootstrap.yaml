@@ -1,18 +1,20 @@
 #cloud-config
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 runcmd:
-  - ' echo Installing k3s '
-  - ' sudo curl -sfL https://get.k3s.io | sh - '
-  - ' sudo chmod 644 /etc/rancher/k3s/k3s.yaml '
-  - ' mkdir -p ~/.kube'
-  - ' ln -sf /etc/rancher/k3s/k3s.yaml ~/.kube/config '
-  - ' curl https://get.helm.sh/helm-v3.6.0-linux-amd64.tar.gz -o helm-v3.6.0-linux-amd64.tar.gz '
-  - ' tar xvf helm-v3.6.0-linux-amd64.tar.gz '
-  - ' sudo mv linux-amd64/helm /usr/local/bin '
-  - ' rm helm-v3.6.0-linux-amd64.tar.gz '
-  - ' kubectl create namespace jenkins '
-  - ' helm repo add bitnami https://charts.bitnami.com/bitnami '
-  - ' helm install my-release bitnami/jenkins -n jenkins '
+  - ' yum -y install nvme-cli '
+  - 'curl '
+  # - ' echo Installing k3s '
+  # - ' sudo curl -sfL https://get.k3s.io | sh - '
+  # - ' sudo chmod 644 /etc/rancher/k3s/k3s.yaml '
+  # - ' mkdir -p ~/.kube'
+  # - ' ln -sf /etc/rancher/k3s/k3s.yaml ~/.kube/config '
+  # - ' curl https://get.helm.sh/helm-v3.6.0-linux-amd64.tar.gz -o helm-v3.6.0-linux-amd64.tar.gz '
+  # - ' tar xvf helm-v3.6.0-linux-amd64.tar.gz '
+  # - ' sudo mv linux-amd64/helm /usr/local/bin '
+  # - ' rm helm-v3.6.0-linux-amd64.tar.gz '
+  # - ' kubectl create namespace jenkins '
+  # - ' helm repo add bitnami https://charts.bitnami.com/bitnami '
+  # - ' helm install my-release bitnami/jenkins -n jenkins '
 
 # If k3sup/k3s does not start properly with the correct service IP's for k3s services, your VM maybe too small
 # from a CPU perspective. Try re-sizing it to something bigger
